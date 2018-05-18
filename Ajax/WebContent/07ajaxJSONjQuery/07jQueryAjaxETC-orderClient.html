@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="EUC-KR">
+	
+	<!--  CDN ( Content Delivery Network ) 호스트 사용 -->
+	 <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+	 <script type="text/javascript">
+	 
+	 	// [ 사용법 : $.ajax( option ) ]
+		function use_ajax_option(){
+
+			/* $.ajax() function 사용법 : http://api.jquery.com/jQuery.ajax/ 참조
+			
+				- jQuery ajax 지원 : $.ajax(option)
+				- option : name = value (JSON 형식)
+				
+				-asyn : boolean
+					==> true(default) | false
+				-method : http method
+					==> GET(default) | POST | ~~
+				- contentType : 서버로 전송되는 Data 형식
+					==> 'application/x-www-form-urlencoded; charset=UTF-8' (default) ~~
+				- data : server 전송하는 QueryString
+					==> Object | String
+				- dataType : 서버에서 받는 Data 형식
+					==> default : Intelligent Guess(알아서?)
+					==> (xml, json, script, or html);
+				- success : function(value1, value2)
+					==> request 성공시 호출되는 CallBackFunction
+					==> value1 : server에서 받은 Data
+					==> value2 : 상태값
+				- 기타등등... */
+			
+				//Debug...
+				alert("use_ajax_option");
+				
+				$.ajax({
+					url : "postJSON-orderServer.jsp",
+					method : "POST",
+					data : {
+						name : $("#name").val(),
+						phone : $("#phone").val()
+					},
+					dataType : "json",
+					success : function(JSONData, status){
+						// Debug...
+						alert(status);
+						// Debug...
+						alert("JSONData : \n" + JSONData);
+						var displayValue = "이름 : " + JSONData.name + "\n"
+											+ "전화 : " + JSONData.phone + "\n"
+											+ "주소 : " + JSONData.address;
+						$("#address").val(displayValue);
+					}
+				});
+		}
+
+	 	//[ 사용법 : $.ajax( url, option )]
+		function use_ajax_url_option(){
+			$.ajax({
+				url : "postJSON-orderServer.jsp",
+				method : "POST",
+				data : {
+					name : $("#name").val(),
+					phone : $("#phone").val()
+				},
+				dataType : "json",
+				success : function(JSONData, status){
+					// Debug...
+					alert(status);
+					// Debug...
+					alert("JSONData : \n" + JSONData);
+					var displayValue = "이름 : " + JSONData.name + "\n"
+										+ "전화 : " + JSONData.phone + "\n"
+										+ "주소 : " + JSONData.address;
+					$("#address").val(displayValue);
+				}
+			});
+		}
+		
+	 	// [ 사용법 : $.getJSON( url, [,data][,function]) : GET 방식임 Request 한글문제 확인
+	 	function use_getJSON(){
+	 		alert("use_getJSON");
+	 		$.getJSON("postJSON-orderServer.jsp",
+	 				   {
+	 						name : $("#name").val(),
+	 						phone : $("#phone").val()
+	 				   },
+	 				   function(JSONData, status){
+	 					   //Debug...
+	 					   alert(status);
+	 					   //Debug...
+	 					   alert("JSONData : \n" + JSONData);
+	 					  var displayValue = "이름 : " + JSONData.name + "\n"
+							+ "전화 : " + JSONData.phone + "\n"
+							+ "주소 : " + JSONData.address;
+	 					 $("#address").val(displayValue);
+	 				   }
+	 		);
+	 	}
+	 	
+	 	// [ 사용법 : $.post(url, [,data][,function]) ]
+	 	function user_post(){
+			//Debug...
+			alert("user_post()");
+			
+			$.post("postJSON-orderServer.jsp",
+					{
+						name : $("#name").val(),
+						phone : $("#phone").val()
+					},
+					function(serverData, status){
+						//Debug...
+						alert(status);
+						alert("Server에서 받은 내용 : \n" + serverData);
+						
+						// serverData 처리
+						var JSONData = $.parseJSON(serverData);
+						// Debug...
+						alert("JSONData : \n" + JSONData);
+						var displayValue = "이름 : " + JSONData.name + "\n"
+						+ "전화 : " + JSONData.phone + "\n"
+						+ "주소 : " + JSONData.address;
+ 					 $("#address").val(displayValue);
+					}
+			);
+	 	}
+	 	
+	 // [ 사용법 : $.get(url, [,data][,function]) : GET 방식임 Request 한글문제 확인 ]
+	 	function user_get(){
+			//Debug...
+			alert("user_get()");
+			
+			$.get("postJSON-orderServer.jsp",
+					{
+						name : $("#name").val(),
+						phone : $("#phone").val()
+					},
+					function(serverData, status){
+						//Debug...
+						alert(status);
+						alert("Server에서 받은 내용 : \n" + serverData);
+						
+						// serverData 처리
+						var JSONData = $.parseJSON(serverData);
+						// Debug...
+						alert("JSONData : \n" + JSONData);
+						var displayValue = "이름 : " + JSONData.name + "\n"
+						+ "전화 : " + JSONData.phone + "\n"
+						+ "주소 : " + JSONData.address;
+ 					 $("#address").val(displayValue);
+					}
+			);
+	 	}
+	 	
+		$(function(){
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.(.className)
+			$("textarea").on("click", function(){
+				
+				//==> 각각을 실습 확인..
+				//use_ajax_option();
+				//use_ajax_url_option();
+				//use_getJSON();
+				//user_post();
+				user_get();
+				
+			});
+			
+			$("form")[0].reset();
+			
+		});
+		
+	 </script>
+</head>
+
+<body onload="document.forms[0].reset()">
+
+	<form>
+	
+		<p>이 &nbsp;&nbsp;&nbsp;&nbsp; 름  :  
+				<input type="text" size="14" name="name"  id ="name"/>
+		</p>
+		
+		<p>전화번호 :  
+				<input type="text" size="14" name="phone"  id="phone"/>
+		</p>
+	
+		<p>주 &nbsp;&nbsp;&nbsp;&nbsp; 소 : </p>  
+	
+		<p>
+			<textarea 	rows="3" cols="50" name="address" id="address">이름을 입력후 :: 여기에click...</textarea>	
+		</p>
+				
+			<p id="testInnerHtml">XXX<input type="submit" value="주문하기" id="submit" />YYY</p>
+		
+	</form>
+	
+</body>
+
+</html>
